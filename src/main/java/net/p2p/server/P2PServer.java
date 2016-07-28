@@ -14,7 +14,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import config.SpringConfig;
 
-public class P2PServer {
+public class P2PServer implements Runnable {
 
     static final Logger logger = LoggerFactory.getLogger("P2PServer");
 
@@ -68,5 +68,11 @@ public class P2PServer {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();
         }
+    }
+
+
+    public void run() {
+        // TODO Auto-generated method stub
+        
     }
 }

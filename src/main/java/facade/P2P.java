@@ -18,7 +18,9 @@ public class P2P {
     P2PClient client;
 
     public void start() throws InterruptedException {
+
         this.server.start(1234);
+
         this.client.start();
     }
 
