@@ -8,26 +8,18 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
+import java.net.InetSocketAddress;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import config.SpringConfig;
 
 public class P2PServer implements Runnable {
 
     static final Logger logger = LoggerFactory.getLogger("P2PServer");
 
-    public static void main(final String[] args) throws InterruptedException {
+    public void start() throws InterruptedException {
 
-        AnnotationConfigApplicationContext springContext = new AnnotationConfigApplicationContext(SpringConfig.class);
-
-        P2PServer server = new P2PServer();
-
-        server.start(1234);
-    }
-
-    public void start(final int port) throws InterruptedException {
+        int port = 8888; // TODO move to config file
 
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -48,7 +40,8 @@ public class P2PServer implements Runnable {
 
                 public void operationComplete(final ChannelFuture future) throws Exception {
                     if (future.isSuccess()) {
-                        P2PServer.logger.info("Start up server successfully,listen on port:{}", port);
+                        P2PServer.logger.info("Start up server successfully,listen on port:{}", ((InetSocketAddress) future
+                            .channel().localAddress()).getPort());
                     } else {
                         P2PServer.logger.info("Failed to start up the server");
                     }
@@ -72,7 +65,10 @@ public class P2PServer implements Runnable {
 
 
     public void run() {
-        // TODO Auto-generated method stub
-        
+        try {
+            start();
+        } catch (InterruptedException e) {
+            P2PServer.logger.error("start failed", e);
+        }
     }
 }

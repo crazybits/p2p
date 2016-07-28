@@ -1,6 +1,9 @@
 package facade;
 
-import net.p2p.client.P2PClient;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import net.p2p.peerdiscovery.PeerDiscoveryManager;
 import net.p2p.server.P2PServer;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +17,22 @@ public class P2P {
 
     @Autowired
     P2PServer server;
+
     @Autowired
-    P2PClient client;
+    PeerDiscoveryManager peerDiscoveryManager;
+
 
     public void start() throws InterruptedException {
 
-        this.server.start(1234);
 
-        this.client.start();
+        ExecutorService threadExecutorService = Executors.newFixedThreadPool(1);
+
+        threadExecutorService.execute(this.server);
+
+        Thread.sleep(3000);
+
+        this.peerDiscoveryManager.startDiscovery();
+
+
     }
-
-
 }

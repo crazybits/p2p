@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -14,12 +13,14 @@ import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
+@Component
 public class PeerDiscoveryManager {
 
     private static final Logger logger = LoggerFactory.getLogger("PeerDiscoveryManager");
@@ -36,7 +37,9 @@ public class PeerDiscoveryManager {
 
     // TODO: above settings should be read from the config file
 
-    private final static Set<Peer> peers = Collections.synchronizedSet(new HashSet<Peer>());
+    private final static Set<Peer> initPeers = Collections.synchronizedSet(new HashSet<Peer>());
+
+    private final static Set<Peer> connectablePeers = Collections.synchronizedSet(new HashSet<Peer>());
 
     private static ThreadPoolExecutor poolExecutor = new ThreadPoolExecutor(PeerDiscoveryManager.corePoolSize,
         PeerDiscoveryManager.maximumPoolSize, PeerDiscoveryManager.keepAliveTime, PeerDiscoveryManager.unit,
@@ -45,44 +48,30 @@ public class PeerDiscoveryManager {
     @PostConstruct
     private void init() {
 
-        System.out.println("Manage init");
+        Peer seedNode1 = new Peer("127.0.0.1", 8881);
+        Peer seedNode2 = new Peer("127.0.0.1", 8883);
+        Peer seedNode3 = new Peer("127.0.0.1", 8888);
+        Peer seedNode4 = new Peer("127.0.0.1", 8888);
 
+        PeerDiscoveryManager.initPeers.add(seedNode1);
+        PeerDiscoveryManager.initPeers.add(seedNode2);
+        PeerDiscoveryManager.initPeers.add(seedNode3);
+        PeerDiscoveryManager.initPeers.add(seedNode4);
 
-        Peer seedNodePeer = new Peer("127.0.0.1", 1234);
-        Peer seedNodePeer2 = new Peer("127.0.0.1", 1235);
-        Peer seedNodePeer3 = new Peer("127.0.0.1", 1236);
-        Peer seedNodePeer4 = new Peer("127.0.0.1", 1237);
-
-        PeerDiscoveryManager.peers.add(seedNodePeer);
-        PeerDiscoveryManager.peers.add(seedNodePeer2);
-        PeerDiscoveryManager.peers.add(seedNodePeer3);
-        PeerDiscoveryManager.peers.add(seedNodePeer4);
-
-    }
-
-    public void runTask(final Runnable runable) {
-
-        try {
-
-            PeerDiscoveryManager.poolExecutor.execute(runable);
-
-        } catch (RejectedExecutionException e) {
-            PeerDiscoveryManager.logger.error("Exceed the allowed maximumPoolSize", e);
-        } catch (Exception e) {
-            PeerDiscoveryManager.logger.error("failed to create more thread in pool", e);
-        }
+        // TODO: Move the real init seed node to config file
 
     }
+
 
     public void startDiscovery() {
 
-        Set<Peer> peers = getPeers();
+        Set<Peer> peers = getInitPeers();
 
         for (Peer peer : peers) {
 
-            PeerDiscoveryThread thread = new PeerDiscoveryThread(peer);
+            PeerDiscovery peerDiscovery = new PeerDiscovery(peer);
 
-            runTask(thread);
+            PeerDiscoveryManager.poolExecutor.execute(peerDiscovery);
 
         }
 
@@ -91,14 +80,26 @@ public class PeerDiscoveryManager {
 
     public void addPeers(final Set<Peer> peers) {
 
-        peers.addAll(peers);
+        PeerDiscoveryManager.connectablePeers.addAll(peers);
+
+    }
+
+    public void addPeer(final Peer peer) {
+
+        PeerDiscoveryManager.connectablePeers.add(peer);
 
     }
 
 
     public Set<Peer> getPeers() {
 
-        return PeerDiscoveryManager.peers;
+        return PeerDiscoveryManager.connectablePeers;
+
+    }
+
+    public Set<Peer> getInitPeers() {
+
+        return PeerDiscoveryManager.initPeers;
 
     }
 

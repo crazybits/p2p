@@ -17,6 +17,7 @@ import facade.P2P;
 @Configuration
 public class SpringConfig {
 
+
     @Bean
     public PeerDiscoveryManager peerDiscoveryManager() {
 
@@ -24,12 +25,12 @@ public class SpringConfig {
     }
 
     @Bean
-    public P2PServer p2pServer() {
+    public P2PServer p2PServer() {
         return new P2PServer();
     }
 
     @Bean
-    public P2PClient p2pClient() {
+    public P2PClient p2PClient() {
         return new P2PClient();
     }
 

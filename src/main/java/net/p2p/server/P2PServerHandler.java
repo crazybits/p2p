@@ -44,15 +44,15 @@ public class P2PServerHandler extends ChannelHandlerAdapter {
 
         switch (type) {
         case HELLO:
-            sentPeersMessage(ctx);
+            // sentPeersMessage(ctx);
             P2PServerHandler.logger.info("Receive hello message:{}", msg);
             break;
         case GET_PEERS:
-            sentPeersMessage(ctx);
+            // sentPeersMessage(ctx);
             P2PServerHandler.logger.info("Receive get peers message:{}", msg);
             break;
         case PEERS:
-            processPeersMessage(msg);
+            // processPeersMessage(msg);
             P2PServerHandler.logger.info("Receive peers message:{}", msg);
             break;
         case PING:
@@ -104,7 +104,7 @@ public class P2PServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable e) {
-        P2PServerHandler.logger.error("failed on P2G handler", e);
+        P2PServerHandler.logger.error("failed on P2 handler", e);
         ctx.close();
     }
 

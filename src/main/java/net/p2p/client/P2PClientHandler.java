@@ -53,16 +53,16 @@ public class P2PClientHandler extends ChannelHandlerAdapter {
 
         switch (type) {
         case HELLO:
-            sentPeersMessage(ctx);
+            // sentPeersMessage(ctx);
             P2PClientHandler.logger.info("Receive hello message:{}", msg);
             break;
         case GET_PEERS:
-            sentPeersMessage(ctx);
+            // sentPeersMessage(ctx);
             P2PClientHandler.logger.info("Receive get peers message:{}", msg);
             break;
         case PEERS:
             processPeersMessage(msg);
-            sentPeersMessage(ctx);
+            // sentPeersMessage(ctx);
             P2PClientHandler.logger.info("Receive peers message:{}", msg);
             break;
         case PING:
