@@ -11,4 +11,5 @@ git clone https://github.com/crazybits/p2p.git
 step 3: run the starter
 
 cd p2p
+
 mvn exec:java -Dexec.mainClass="Starter"
