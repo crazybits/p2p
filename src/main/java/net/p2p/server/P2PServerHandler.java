@@ -13,7 +13,6 @@ import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -25,10 +24,13 @@ public class P2PServerHandler extends ChannelHandlerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger("P2PServerHandler");
 
-    @Autowired
+
     private PeerDiscoveryManager peerDiscoveryManager;
 
-    public P2PServerHandler() {
+    public P2PServerHandler(final PeerDiscoveryManager peerDiscoveryManager) {
+
+        this.peerDiscoveryManager = peerDiscoveryManager;
+
         P2PServerHandler.logger.info("create P2PServerHandler instance");
     }
 
@@ -44,15 +46,15 @@ public class P2PServerHandler extends ChannelHandlerAdapter {
 
         switch (type) {
         case HELLO:
-            // sentPeersMessage(ctx);
+            sentPeersMessage(ctx);
             P2PServerHandler.logger.info("Receive hello message:{}", msg);
             break;
         case GET_PEERS:
-            // sentPeersMessage(ctx);
+            sentPeersMessage(ctx);
             P2PServerHandler.logger.info("Receive get peers message:{}", msg);
             break;
         case PEERS:
-            // processPeersMessage(msg);
+            processPeersMessage(msg);
             P2PServerHandler.logger.info("Receive peers message:{}", msg);
             break;
         case PING:
@@ -90,7 +92,7 @@ public class P2PServerHandler extends ChannelHandlerAdapter {
      */
     private void sentPeersMessage(final ChannelHandlerContext ctx) {
 
-        Set<Peer> peers = this.peerDiscoveryManager.getPeers();
+        Set<Peer> peers = this.peerDiscoveryManager.getConnectablePeers();
 
         Message message = MessageFactory.createPeersMessage(peers);
         ctx.writeAndFlush(message);

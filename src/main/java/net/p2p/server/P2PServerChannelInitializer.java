@@ -8,6 +8,8 @@ import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.util.concurrent.TimeUnit;
 
+import net.p2p.peerdiscovery.PeerDiscoveryManager;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +34,7 @@ public class P2PServerChannelInitializer extends ChannelInitializer<NioSocketCha
         ch.pipeline().addLast("ping pong", new IdleStateHandler(60, 60, 60));
         ch.pipeline().addLast("marshalling Decoder", MarshallingFactory.buildMarshallingDecoder());
         ch.pipeline().addLast("marshalling Encoder", MarshallingFactory.buildMarshallingEncoder());
-        ch.pipeline().addLast(new P2PServerHandler());
+        ch.pipeline().addLast(new P2PServerHandler(new PeerDiscoveryManager()));
 
     }
 }

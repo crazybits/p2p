@@ -10,7 +10,7 @@ public interface P2PListener {
 
     public void onPeerConnected();
 
-    public void onPeerDisonnected();
+    public void onPeerDisconnected();
 
     public void onMessageReceived();
 

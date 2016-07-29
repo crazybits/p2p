@@ -45,13 +45,18 @@ public class PeerDiscoveryManager {
         PeerDiscoveryManager.maximumPoolSize, PeerDiscoveryManager.keepAliveTime, PeerDiscoveryManager.unit,
         PeerDiscoveryManager.workQueue);
 
-    @PostConstruct
-    private void init() {
 
-        Peer seedNode1 = new Peer("127.0.0.1", 8881);
-        Peer seedNode2 = new Peer("127.0.0.1", 8883);
-        Peer seedNode3 = new Peer("127.0.0.1", 8888);
-        Peer seedNode4 = new Peer("127.0.0.1", 8888);
+    public PeerDiscoveryManager() {
+        PeerDiscoveryManager.logger.info("PeerDiscoveryManager instance has been initialed");
+    }
+
+    @PostConstruct
+    private void initSeedNode() {
+
+        Peer seedNode1 = new Peer("127.0.0.1", 8888);
+        Peer seedNode2 = new Peer("127.0.0.1", 8888);
+        Peer seedNode3 = new Peer("127.0.0.1", 8882);
+        Peer seedNode4 = new Peer("127.0.0.1", 8881);
 
         PeerDiscoveryManager.initPeers.add(seedNode1);
         PeerDiscoveryManager.initPeers.add(seedNode2);
@@ -91,7 +96,7 @@ public class PeerDiscoveryManager {
     }
 
 
-    public Set<Peer> getPeers() {
+    public Set<Peer> getConnectablePeers() {
 
         return PeerDiscoveryManager.connectablePeers;
 

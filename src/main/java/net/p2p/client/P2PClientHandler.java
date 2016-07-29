@@ -15,7 +15,6 @@ import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -27,10 +26,11 @@ public class P2PClientHandler extends ChannelHandlerAdapter {
 
     private static final Logger logger = LoggerFactory.getLogger("P2PClientHandler");
 
-    @Autowired
+
     private PeerDiscoveryManager peerDiscoveryManager;
 
-    public P2PClientHandler() {
+    public P2PClientHandler(final PeerDiscoveryManager peerDiscoveryManager) {
+        this.peerDiscoveryManager = peerDiscoveryManager;
         P2PClientHandler.logger.info("create P2PClientHandler instance");
     }
 
@@ -53,16 +53,15 @@ public class P2PClientHandler extends ChannelHandlerAdapter {
 
         switch (type) {
         case HELLO:
-            // sentPeersMessage(ctx);
+            sentPeersMessage(ctx);
             P2PClientHandler.logger.info("Receive hello message:{}", msg);
             break;
         case GET_PEERS:
-            // sentPeersMessage(ctx);
+            sentPeersMessage(ctx);
             P2PClientHandler.logger.info("Receive get peers message:{}", msg);
             break;
         case PEERS:
             processPeersMessage(msg);
-            // sentPeersMessage(ctx);
             P2PClientHandler.logger.info("Receive peers message:{}", msg);
             break;
         case PING:
@@ -89,7 +88,7 @@ public class P2PClientHandler extends ChannelHandlerAdapter {
      */
     private void sentPeersMessage(final ChannelHandlerContext ctx) {
 
-        Set<Peer> peers = this.peerDiscoveryManager.getPeers();
+        Set<Peer> peers = this.peerDiscoveryManager.getConnectablePeers();
 
         Message message = MessageFactory.createPeersMessage(peers);
         ctx.writeAndFlush(message);
@@ -105,9 +104,12 @@ public class P2PClientHandler extends ChannelHandlerAdapter {
      * @param msg
      */
     private void processPeersMessage(final Object msg) {
+
+
         Message message = (Message) msg;
         Set<Peer> peers = (Set<Peer>) message.getBody().body;
         this.peerDiscoveryManager.addPeers(peers);
+        P2PClientHandler.logger.info("processed peers message");
     }
 
     @Override

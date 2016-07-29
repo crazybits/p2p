@@ -10,7 +10,6 @@
 package p2p;
 
 import net.p2p.client.P2PClient;
-import net.p2p.protocol.Peer;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -29,7 +28,7 @@ public class ClientTest extends P2PClient {
 
         ClientTest clientTest = new ClientTest();
 
-        clientTest.connect(new Peer("127.0.0.1", 8888));
+        clientTest.connect();
 
 
     }

@@ -7,10 +7,16 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.net.InetSocketAddress;
+import java.util.Set;
+
+import net.p2p.peerdiscovery.PeerDiscoveryManager;
 import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +26,10 @@ public class P2PClient {
 
     static final Logger logger = LoggerFactory.getLogger("P2PClient");
 
-    public void connect(final Peer peer) {
+    @Autowired
+    PeerDiscoveryManager peerDiscoveryManager;
+
+    public void connect() {
 
         P2PClient.logger.info("Start to discory connectable peers");
 
@@ -35,27 +44,38 @@ public class P2PClient {
             b.option(ChannelOption.SO_KEEPALIVE, true);
             b.handler(new P2PClientChannelInitializer());
 
-            ChannelFuture ch = b.connect(peer.getAddress().getHostName(), peer.getAddress().getPort()).sync();
+            Set<Peer> peers = this.peerDiscoveryManager.getInitPeers();
 
-            ch.addListener(new ChannelFutureListener() {
+            ChannelFuture ch = null;
 
-                public void operationComplete(final ChannelFuture future) throws Exception {
-                    if (future.isSuccess()) {
-                        P2PClient.logger.info("Connect to {}:{} successfully.", peer.getAddress().getHostName(), peer.getAddress()
-                            .getPort());
-                    } else {
-                        P2PClient.logger.info("Failed to connect to {}:{}", peer.getAddress().getHostName(), peer.getAddress()
-                            .getPort());
+
+            for (Peer peer : peers) {
+
+                ch = b.connect(peer.getAddress().getHostName(), peer.getAddress().getPort()).sync();
+
+                ch.addListener(new ChannelFutureListener() {
+
+                    public void operationComplete(final ChannelFuture future) throws Exception {
+                        if (future.isSuccess()) {
+                            InetSocketAddress net = (InetSocketAddress) future.channel().remoteAddress();
+                            P2PClient.logger.info("Connect to {}:{} successfully.", net.getHostName(), net.getPort());
+                        } else {
+                            InetSocketAddress net = (InetSocketAddress) future.channel().remoteAddress();
+                            P2PClient.logger.info("Failed to connect to {}:{}", net.getHostName(), net.getPort());
+
+                        }
                     }
-                }
 
-            });
+                });
+
+
+            }
 
             ch.channel().closeFuture().sync();
 
         } catch (Exception e) {
 
-            P2PClient.logger.error("failed to connect to {}:{}", peer.getAddress().getHostName(), peer.getAddress().getPort());
+            P2PClient.logger.error("failed to connect", e);
 
         } finally {
             // The connection is closed automatically on shutdown.

@@ -38,7 +38,7 @@ public class P2PListenerAdapter implements P2PListener {
      * 
      * @see listener.P2PListener#onPeerDisonnected()
      */
-    public void onPeerDisonnected() {
+    public void onPeerDisconnected() {
         // TODO Auto-generated method stub
 
     }
