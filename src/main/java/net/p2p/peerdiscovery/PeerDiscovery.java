@@ -12,7 +12,6 @@ import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * <p>
@@ -21,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class PeerDiscovery implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger("PeerDiscoveryThread");
-
-    @Autowired
-    PeerDiscoveryManager peerDiscoveryManager;
+    private static final Logger logger = LoggerFactory.getLogger("PeerDiscovery");
 
     Peer targetPeer;
 
