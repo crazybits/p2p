@@ -2,25 +2,44 @@ package net.p2p.kademlia;
 
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Random;
 
 /**
  * <p>
- * <b> TODO : Insert description of the class's responsibility/role. </b>
+ * <b> Impmentation of kademlia,the procotal details, refer to
+ * procotal,http://xlattice.sourceforge.net/components
+ * /protocol/kademlia/specs.html </b>
  * </p>
  */
 public class NodeID {
 
-    public static int ID_BIT_LENGTH = 120;
+    public static int ID_BIT_LENGTH = 120;// 120 bit=20 bytes
 
     private byte[] IDBytes;
 
+
+    /**
+     * <p>
+     * <b> To genereate a random 120 bit node id</b>
+     * </p>
+     * 
+     * 
+     */
     public NodeID() {
 
-        this.IDBytes = new byte[NodeID.ID_BIT_LENGTH / 8];// 120 bit=8
-                                                          // bytes
+        this.IDBytes = new byte[NodeID.ID_BIT_LENGTH / 8];
+
         new Random().nextBytes(this.IDBytes);
     }
+
+    /**
+     * <p>
+     * <b> Genereate the node id with given 8 bytes</b>
+     * </p>
+     * 
+     * @param byte [] IDBytes
+     */
 
     public NodeID(final byte[] IDBytes) {
 
@@ -38,6 +57,14 @@ public class NodeID {
 
     }
 
+
+    /**
+     * <p>
+     * <b> cacluate the distance of the target node id</b>
+     * </p>
+     * 
+     * @param NodeID
+     */
     public NodeID xor(final NodeID id) {
 
         byte[] result = new byte[NodeID.ID_BIT_LENGTH / 8];
@@ -55,17 +82,50 @@ public class NodeID {
 
     }
 
-    public BigInteger getInt() {
+    public int distance(final NodeID target) {
+
+        NodeID xorResult = xor(target);
+
+        // find the first "1" bit of the xor result
+
+        BitSet bitSet = BitSet.valueOf(xorResult.getBytes());
+
+        int distance = 0;
+
+        for (int i = 0; i < NodeID.ID_BIT_LENGTH; i++) {
+
+
+            if (bitSet.get(i)) {
+
+                distance = i;
+                break;
+            }
+
+        }
+
+        return NodeID.ID_BIT_LENGTH - distance;
+
+    }
+
+    public BigInteger toBigInteger() {
 
         return new BigInteger(1, this.getBytes());
 
     }
 
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @return
+     */
     public String toHexString() {
 
         BigInteger bigInteger = new BigInteger(1, this.IDBytes);
 
-        return String.format("%0" + (this.IDBytes.length << 1) + "x", bigInteger);
+        return bigInteger.toString(16);
+
 
     }
 
