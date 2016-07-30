@@ -60,7 +60,8 @@ public class NodeID {
 
     /**
      * <p>
-     * <b> cacluate the distance of the target node id</b>
+     * <b> cacluate the distance of the target node id,the return result date
+     * type is also NodeID</b>
      * </p>
      * 
      * @param NodeID
@@ -82,6 +83,14 @@ public class NodeID {
 
     }
 
+    /**
+     * <p>
+     * <b> cacluate the distance of the target node id,find the first "1" bit
+     * of the xor result</b>
+     * </p>
+     * 
+     * @param NodeID
+     */
     public int distance(final NodeID target) {
 
         NodeID xorResult = xor(target);
@@ -90,20 +99,18 @@ public class NodeID {
 
         BitSet bitSet = BitSet.valueOf(xorResult.getBytes());
 
-        int distance = 0;
+        int position = 0;
 
         for (int i = 0; i < NodeID.ID_BIT_LENGTH; i++) {
 
-
             if (bitSet.get(i)) {
-
-                distance = i;
+                position = i;
                 break;
             }
 
         }
 
-        return NodeID.ID_BIT_LENGTH - distance;
+        return NodeID.ID_BIT_LENGTH - position;
 
     }
 

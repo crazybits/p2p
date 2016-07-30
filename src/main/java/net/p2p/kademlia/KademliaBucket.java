@@ -7,7 +7,7 @@ import java.util.TreeSet;
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
-public class Bucket implements IBucket {
+public class KademliaBucket implements IKademliaBucket {
 
 
     private final int depth;
@@ -28,7 +28,7 @@ public class Bucket implements IBucket {
      * @param depth
      * @param config
      */
-    public Bucket(final int depth, final KademliaConfig config) {
+    public KademliaBucket(final int depth, final KademliaConfig config) {
         super();
         this.depth = depth;
         this.config = config;
