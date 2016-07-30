@@ -1,6 +1,8 @@
-package net.p2p.kademlia;
+package net.p2p.kademlia.comparator;
 
 import java.util.Comparator;
+
+import net.p2p.kademlia.dht.NodeID;
 
 /**
  * <p>

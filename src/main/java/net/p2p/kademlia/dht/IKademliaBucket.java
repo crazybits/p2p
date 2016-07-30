@@ -1,4 +1,4 @@
-package net.p2p.kademlia;
+package net.p2p.kademlia.dht;
 
 /**
  * <p>
@@ -7,11 +7,9 @@ package net.p2p.kademlia;
  */
 public interface IKademliaBucket {
 
-    public void insert(Node node);
+    public NodeContact addNode(NodeContact node);
 
-    public void removeNode(Node node);
-
-    public boolean containNode(Node node);
+    public void removeNode(NodeContact node);
 
     public int getDepth();
 

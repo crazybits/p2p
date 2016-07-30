@@ -2,7 +2,7 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.util.BitSet;
 
-import net.p2p.kademlia.NodeID;
+import net.p2p.kademlia.dht.NodeID;
 
 import org.junit.Test;
 

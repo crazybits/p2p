@@ -1,4 +1,4 @@
-package net.p2p.kademlia;
+package net.p2p.kademlia.message;
 
 public enum MessageTypes {
 

@@ -106,7 +106,7 @@ public class P2PServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable e) {
-        P2PServerHandler.logger.error("failed on P2 handler", e);
+        P2PServerHandler.logger.error("failed on P2P handler", e);
         ctx.close();
     }
 
