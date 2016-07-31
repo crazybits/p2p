@@ -14,20 +14,20 @@ import org.slf4j.LoggerFactory;
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
-public class DiscoveryClientHandler extends ChannelHandlerAdapter {
+public class DiscoveryHandler extends ChannelHandlerAdapter {
 
-    static final Logger logger = LoggerFactory.getLogger("DiscoveryClientHandler");
+    static final Logger logger = LoggerFactory.getLogger("DiscoveryHandler");
 
 
-    public DiscoveryClientHandler() {
+    public DiscoveryHandler() {
 
-        DiscoveryClientHandler.logger.info("DiscoveryClientHandler instance has been created");
+        DiscoveryHandler.logger.info("DiscoveryHandler instance has been created");
     }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
 
-        DiscoveryClientHandler.logger.info("new discovery channel activated on DiscoveryClientHandler");
+        DiscoveryHandler.logger.info("new discovery channel activatet");
 
         ctx.writeAndFlush(MessageFactory.createMessage(MessageTypes.PING));
 
@@ -42,19 +42,19 @@ public class DiscoveryClientHandler extends ChannelHandlerAdapter {
 
         switch (types) {
         case PING:
-            DiscoveryServerHandler.logger.info("Ping message recevied");
+            DiscoveryHandler.logger.info("Ping message recevied");
             ctx.write(MessageFactory.createMessage(MessageTypes.FIND_NODE));
             break;
         case STORE:
-            DiscoveryServerHandler.logger.info("Store message recevied");
+            DiscoveryHandler.logger.info("Store message recevied");
             // ctx.writeAndFlush(MessageFactory.createMessage(MessageTypes.FIND_NODE));
             break;
         case FIND_NODE:
-            DiscoveryServerHandler.logger.info("FindNode message recevied");
-            // ctx.writeAndFlush(MessageFactory.createMessage(MessageTypes.FIND_NODE));
+            DiscoveryHandler.logger.info("FindNode message recevied");
+            ctx.writeAndFlush(MessageFactory.createMessage(MessageTypes.FIND_VALUE));
             break;
         case FIND_VALUE:
-            DiscoveryServerHandler.logger.info("FindValue message recevied");
+            DiscoveryHandler.logger.info("FindValue message recevied");
             // ctx.writeAndFlush(MessageFactory.createMessage(MessageTypes.FIND_NODE));
             break;
 
@@ -71,7 +71,7 @@ public class DiscoveryClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable e) {
-        DiscoveryClientHandler.logger.error("failed on DiscoveryClientHandler", e);
+        DiscoveryHandler.logger.error("failed on DiscoveryClientHandler", e);
         ctx.close();
     }
 

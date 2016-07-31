@@ -6,8 +6,7 @@ import net.p2p.server.P2PServer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import facade.P2P;
+import org.springframework.context.annotation.Import;
 
 /**
  * <p>
@@ -15,6 +14,7 @@ import facade.P2P;
  * </p>
  */
 @Configuration
+@Import(AppConfig.class)
 public class SpringConfig {
 
 
@@ -34,8 +34,5 @@ public class SpringConfig {
         return new P2PClient();
     }
 
-    @Bean
-    public P2P p2p() {
-        return new P2P();
-    }
+
 }

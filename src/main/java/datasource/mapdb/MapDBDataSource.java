@@ -8,21 +8,27 @@ import org.mapdb.DB;
 import org.mapdb.DBMaker;
 import org.mapdb.Serializer;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 import datasource.KeyValueDataSource;
 
 public class MapDBDataSource implements KeyValueDataSource {
 
     private static final int BATCH_SIZE = 1024 * 1000 * 10;
 
+    Config config = ConfigFactory.defaultApplication();
 
     private DB db;
     private Map<byte[], byte[]> map;
     private String name;
     private boolean alive;
 
+
     @Override
     public void init() {
-        File dbFile = new File("/" + this.name);
+
+        File dbFile = new File(this.config.getString("database.dir") + this.name);
         if (!dbFile.getParentFile().exists()) {
             dbFile.getParentFile().mkdirs();
         }
