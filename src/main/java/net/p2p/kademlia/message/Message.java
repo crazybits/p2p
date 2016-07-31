@@ -48,5 +48,14 @@ public class Message implements Serializable {
         this.types = types;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return "Message [types=" + this.types + ", body=" + this.body + "]";
+    }
+
 
 }

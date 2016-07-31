@@ -31,8 +31,8 @@ public class MarshallingFactory {
 
         UnmarshallerProvider provider = new DefaultUnmarshallerProvider(marshallerFactory, configuration);
 
-        int maxSzie = 4096;
-        MarshallingDecoder decoder = new MarshallingDecoder(provider, maxSzie);
+        int maxSize = 1024 << 2;
+        MarshallingDecoder decoder = new MarshallingDecoder(provider, maxSize);
         return decoder;
 
     }

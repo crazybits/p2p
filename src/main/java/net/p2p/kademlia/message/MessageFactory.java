@@ -7,13 +7,26 @@ package net.p2p.kademlia.message;
  */
 public class MessageFactory {
 
-    public static Message createPingMessage() {
-
-
-        Message msg = new Message(MessageTypes.PING);
-
-
+    public static Message createMessage(final MessageTypes type) {
+        Message msg = null;
+        switch (type) {
+        case PING:
+            msg = new Message(MessageTypes.PING);
+            break;
+        case FIND_NODE:
+            msg = new Message(MessageTypes.FIND_NODE);
+            break;
+        case FIND_VALUE:
+            msg = new Message(MessageTypes.FIND_VALUE);
+            break;
+        case STORE:
+            msg = new Message(MessageTypes.STORE);
+            break;
+        default:
+            break;
+        }
         return msg;
 
     }
+
 }

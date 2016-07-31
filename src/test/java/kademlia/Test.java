@@ -2,6 +2,7 @@ package kademlia;
 
 import net.p2p.kademlia.net.NodeDiscoveryWithUDP;
 
+
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
@@ -17,9 +18,10 @@ public class Test {
      * @param args
      */
     public static void main(final String[] args) {
-        NodeDiscoveryWithUDP nodeDiscoveryWithUDP = new NodeDiscoveryWithUDP();
+        // NodeDiscoveryWithUDP nodeDiscoveryWithUDP = new
+        // NodeDiscoveryWithUDP();
 
-        nodeDiscoveryWithUDP.startKademliaDiscovry();
+        NodeDiscoveryWithUDP.startKademliaDiscovry();
 
     }
 

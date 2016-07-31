@@ -18,4 +18,13 @@ public class MessageBody implements Serializable {
 
     Object bodyObject;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return "MessageBody [bodyObject=" + this.bodyObject + "]";
+    }
+
 }
