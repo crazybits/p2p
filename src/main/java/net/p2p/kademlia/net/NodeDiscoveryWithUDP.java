@@ -80,6 +80,7 @@ public class NodeDiscoveryWithUDP {
                 protected void initChannel(final NioDatagramChannel ch) throws Exception {
                     ch.pipeline().addLast("netty logggin handler", new LoggingHandler("Netty Server Logging"));
                     ch.pipeline().addLast("data packet decoder", new DataPacketDecoder());
+                    ch.pipeline().addLast("data packet encoder", new DataPacketEncoder());
                     ch.pipeline().addLast("marshalling Decoder", MarshallingFactory.buildMarshallingDecoder());
                     ch.pipeline().addLast("marshalling Encoder", MarshallingFactory.buildMarshallingEncoder());
                     ch.pipeline().addLast("kademlia prococal discovery handler", new DiscoveryServerHandler());
@@ -121,6 +122,7 @@ public class NodeDiscoveryWithUDP {
 
                     ch.pipeline().addLast("netty logggin handler", new LoggingHandler("Netty Client Logging"));
                     ch.pipeline().addLast("data packet decoder", new DataPacketDecoder());
+                    ch.pipeline().addLast("data packet encoder", new DataPacketEncoder());
                     ch.pipeline().addLast("marshalling Decoder", MarshallingFactory.buildMarshallingDecoder());
                     ch.pipeline().addLast("marshalling Encoder", MarshallingFactory.buildMarshallingEncoder());
                     ch.pipeline().addLast("kademlia prococal discovery handler", new DiscoveryClientHandler());
@@ -129,7 +131,7 @@ public class NodeDiscoveryWithUDP {
 
             });
 
-            ChannelFuture ch = b.connect("127.0.0.1", 8888).sync();
+            ChannelFuture ch = b.bind(8889).sync();
 
             ch.channel().closeFuture().sync();
 

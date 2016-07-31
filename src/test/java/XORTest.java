@@ -31,4 +31,17 @@ public class XORTest {
 
         System.out.println(Integer.toBinaryString(8));
     }
+
+    @Test
+    public void testBit() {
+        int i = 1;
+
+        i = i << 0;
+
+        System.out.println(i);
+
+        i = i << 2;
+
+        System.out.println(i);
+    }
 }

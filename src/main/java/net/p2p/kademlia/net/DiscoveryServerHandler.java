@@ -29,11 +29,11 @@ public class DiscoveryServerHandler extends ChannelHandlerAdapter {
 
         DiscoveryClientHandler.logger.info("new discovery channel activated on DiscoveryServerHandler");
 
-
     }
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) {
+
 
         Message message = (Message) msg;
 
