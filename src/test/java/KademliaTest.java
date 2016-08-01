@@ -26,6 +26,7 @@ public class KademliaTest {
         NodeID id4 = new NodeID();
 
         System.out.println("ID 1=" + id.toHexString());
+        System.out.println("ID 1=" + id.toBinaryString());
         System.out.println("ID 2=" + id2.toHexString());
         System.out.println("ID 3=" + id3.toHexString());
         System.out.println("ID 4=" + id4.toHexString());

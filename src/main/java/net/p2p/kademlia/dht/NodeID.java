@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Random;
 
+import net.p2p.kademlia.config.KademliaConfig;
+
 /**
  * <p>
  * <b> Impmentation of kademlia,the procotal details, refer to
@@ -14,21 +16,18 @@ import java.util.Random;
  */
 public class NodeID {
 
-    public static int ID_BIT_LENGTH = 120;// 120 bit=20 bytes
-
     private byte[] IDBytes;
-
 
     /**
      * <p>
-     * <b> To genereate a random 120 bit node id</b>
+     * <b> To genereate a random node id</b>
      * </p>
      * 
      * 
      */
     public NodeID() {
 
-        this.IDBytes = new byte[NodeID.ID_BIT_LENGTH / 8];
+        this.IDBytes = new byte[KademliaConfig.ID_BIT_LENGTH / 8];
 
         new Random().nextBytes(this.IDBytes);
     }
@@ -43,13 +42,34 @@ public class NodeID {
 
     public NodeID(final byte[] IDBytes) {
 
-        if (IDBytes.length != NodeID.ID_BIT_LENGTH / 8) {
+        if (IDBytes.length != KademliaConfig.ID_BIT_LENGTH / 8) {
             throw new IllegalArgumentException("Invalid byte length");
         }
 
         this.IDBytes = IDBytes;
 
     }
+
+
+    /**
+     * <p>
+     * <b> Genereate node id with the given the BitSet</b>
+     * </p>
+     * 
+     * @param BitSet
+     *            bits
+     */
+
+
+    public NodeID(final BitSet bits) {
+
+        if (bits.size() != KademliaConfig.ID_BIT_LENGTH) {
+            throw new IllegalArgumentException("Invalid byte length");
+        }
+
+        this.IDBytes = bits.toByteArray();
+    }
+
 
     public byte[] getBytes() {
 
@@ -68,11 +88,11 @@ public class NodeID {
      */
     public NodeID xor(final NodeID id) {
 
-        byte[] result = new byte[NodeID.ID_BIT_LENGTH / 8];
+        byte[] result = new byte[KademliaConfig.ID_BIT_LENGTH / 8];
         byte[] idByte = id.getBytes();
 
 
-        for (int i = 0; i < NodeID.ID_BIT_LENGTH / 8; i++) {
+        for (int i = 0; i < KademliaConfig.ID_BIT_LENGTH / 8; i++) {
 
             result[i] = (byte) (this.IDBytes[i] ^ idByte[i]);
         }
@@ -101,7 +121,7 @@ public class NodeID {
 
         int position = 0;
 
-        for (int i = 0; i < NodeID.ID_BIT_LENGTH; i++) {
+        for (int i = 0; i < KademliaConfig.ID_BIT_LENGTH; i++) {
 
             if (bitSet.get(i)) {
                 position = i;
@@ -110,29 +130,7 @@ public class NodeID {
 
         }
 
-        return NodeID.ID_BIT_LENGTH - position;
-
-    }
-
-    public BigInteger toBigInteger() {
-
-        return new BigInteger(1, this.getBytes());
-
-    }
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @return
-     */
-    public String toHexString() {
-
-        BigInteger bigInteger = new BigInteger(1, this.IDBytes);
-
-        return bigInteger.toString(16);
-
+        return position;
 
     }
 
@@ -160,6 +158,51 @@ public class NodeID {
             return false;
         }
         return true;
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @return
+     */
+    public BigInteger toBigInteger() {
+
+        return new BigInteger(1, this.getBytes());
+
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @return
+     */
+    public String toHexString() {
+
+        BigInteger bigInteger = new BigInteger(1, this.IDBytes);
+
+        return bigInteger.toString(16);
+
+
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @return
+     */
+    public String toBinaryString() {
+
+        BigInteger bigInteger = new BigInteger(1, this.IDBytes);
+
+        return bigInteger.toString(2);
+
+
     }
 
     @Override

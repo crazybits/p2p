@@ -18,7 +18,6 @@ public class KademliaBucket implements IKademliaBucket {
     private final int depth;
 
     private List<NodeContact> nodes = new ArrayList<NodeContact>();
-    private final KademliaConfig config;
 
 
     /**
@@ -28,25 +27,12 @@ public class KademliaBucket implements IKademliaBucket {
      * 
      */
     public KademliaBucket(final int depth) {
-        this(depth, new KademliaConfig());
-    }
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @param depth
-     * @param config
-     */
-    public KademliaBucket(final int depth, final KademliaConfig config) {
-        super();
         this.depth = depth;
-        this.config = config;
     }
 
 
     public synchronized NodeContact addNode(final NodeContact e) {
+
         if (!this.nodes.contains(e)) {
             if (this.nodes.size() >= KademliaConfig.BUCKET_SIZE) {
                 return getLastSeen();

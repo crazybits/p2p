@@ -35,6 +35,16 @@ public class NodeContact {
      * <b> TODO : Insert description of the method's responsibility/role. </b>
      * </p>
      * 
+     */
+    public int distance(final NodeID from, final NodeID to) {
+        return from.distance(to);
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
      * @param ownNodeID
      * @param node
      * @param lastSeen
@@ -60,26 +70,10 @@ public class NodeContact {
     }
 
     /**
-     * @param ownNodeID
-     *            the ownNodeID to set
-     */
-    public void setOwnNodeID(final NodeID ownNodeID) {
-        this.ownNodeID = ownNodeID;
-    }
-
-    /**
      * @return the node
      */
     public Node getNode() {
         return this.node;
-    }
-
-    /**
-     * @param node
-     *            the node to set
-     */
-    public void setNode(final Node node) {
-        this.node = node;
     }
 
     /**
@@ -89,29 +83,5 @@ public class NodeContact {
 
         return this.lastSeen;
     }
-
-    /**
-     * @param lastSeen
-     *            the lastSeen to set
-     */
-    public void setLastSeen(final long lastSeen) {
-        this.lastSeen = lastSeen;
-    }
-
-    /**
-     * @return the distance
-     */
-    public int getDistance() {
-        return this.distance;
-    }
-
-    /**
-     * @param distance
-     *            the distance to set
-     */
-    public void setDistance(final int distance) {
-        this.distance = distance;
-    }
-
 
 }

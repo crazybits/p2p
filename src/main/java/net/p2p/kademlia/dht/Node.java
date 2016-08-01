@@ -28,6 +28,20 @@ public class Node {
     }
 
     /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @param address
+     */
+    public Node(final InetSocketAddress address) {
+        super();
+        this.nodeId = new NodeID();
+        this.address = address;
+    }
+
+
+    /**
      * @return the nodeId
      */
     public NodeID getNodeId() {
@@ -93,6 +107,15 @@ public class Node {
             return false;
         }
         return true;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+        return "Node [nodeId=" + this.nodeId.toBinaryString() + ", address=" + this.address + "]";
     }
 
 }

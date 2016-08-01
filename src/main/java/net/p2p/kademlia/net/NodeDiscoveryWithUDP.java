@@ -3,6 +3,7 @@ package net.p2p.kademlia.net;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
@@ -64,7 +65,7 @@ public class NodeDiscoveryWithUDP {
             Bootstrap b = new Bootstrap();
             b.group(worker);
             b.channel(NioDatagramChannel.class);
-            // b.option(ChannelOption.SO_BROADCAST, true);
+            b.option(ChannelOption.SO_BROADCAST, true);
             b.handler(new ChannelInitializer<NioDatagramChannel>() {
 
                 protected void initChannel(final NioDatagramChannel ch) throws Exception {
@@ -74,7 +75,7 @@ public class NodeDiscoveryWithUDP {
                     ch.pipeline().addLast("data packet encoder", new DataPacketEncoder());
                     ch.pipeline().addLast("marshalling Decoder", MarshallingFactory.buildMarshallingDecoder());
                     ch.pipeline().addLast("marshalling Encoder", MarshallingFactory.buildMarshallingEncoder());
-                    ch.pipeline().addLast("kademlia prococal discovery handler", new DiscoveryHandler());
+                    ch.pipeline().addLast("kademlia protocol discovery handler", new DiscoveryHandler());
 
                 }
 

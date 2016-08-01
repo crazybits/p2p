@@ -19,9 +19,7 @@ public class DHT {
 
     private KademliaBucket[] buckets;
 
-    private ArrayList<NodeContact> allNodes;
-
-    private KademliaConfig config;
+    private List<NodeContact> allNodes;
 
 
     /**
@@ -47,9 +45,13 @@ public class DHT {
         this.self = self;
         this.allNodes = new ArrayList<NodeContact>();
 
-        this.buckets = new KademliaBucket[KademliaConfig.BUCKET_SIZE];
-        for (int i = 0; i < KademliaConfig.BUCKET_SIZE; i++) {
+        this.buckets = new KademliaBucket[KademliaConfig.BUCKETS_COUNT];
+        for (int i = 0; i < KademliaConfig.BUCKETS_COUNT; i++) {
             this.buckets[i] = new KademliaBucket(i);
+        }
+
+        if (includeSelf) {
+            addNode(this.self);
         }
 
     }
@@ -182,10 +184,10 @@ public class DHT {
     public synchronized List<Node> getClosestNodes(final NodeID targetId) {
 
         List<NodeContact> closestEntries = getAllNodes();
-        List<Node> closestNodes = new ArrayList<>();
+        List<Node> closestNodes = new ArrayList<Node>();
         Collections.sort(closestEntries, new DistanceComparator(targetId));
-        if (closestEntries.size() > KademliaConfig.BUCKET_SIZE) {
-            closestEntries = closestEntries.subList(0, KademliaConfig.BUCKET_SIZE);
+        if (closestEntries.size() > KademliaConfig.FIND_NODE_MAX_RETURN_COUNT) {
+            closestEntries = closestEntries.subList(0, KademliaConfig.FIND_NODE_MAX_RETURN_COUNT);
         }
 
         for (NodeContact e : closestEntries) {
@@ -201,7 +203,8 @@ public class DHT {
      * 
      */
     public int getBucketId(final NodeContact contact) {
-        int id = contact.getDistance() - 1;
+
+        int id = this.self.getNodeId().distance(contact.getNode().getNodeId()) - 1;
         return id < 0 ? 0 : id;
     }
 }

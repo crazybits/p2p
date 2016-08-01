@@ -18,8 +18,6 @@ public class Test {
      * @param args
      */
     public static void main(final String[] args) {
-        // NodeDiscoveryWithUDP nodeDiscoveryWithUDP = new
-        // NodeDiscoveryWithUDP();
 
         NodeDiscoveryWithUDP.startKademliaDiscovry();
 
