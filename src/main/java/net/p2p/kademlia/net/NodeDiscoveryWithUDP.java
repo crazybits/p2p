@@ -13,6 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import serialization.MarshallingFactory;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 
 /**
  * <p>
@@ -22,6 +25,9 @@ import serialization.MarshallingFactory;
 public class NodeDiscoveryWithUDP {
 
     static final Logger logger = LoggerFactory.getLogger("NodeDiscoveryWithUDP");
+
+
+    static Config config = ConfigFactory.defaultApplication();
 
     /**
      * <p>
@@ -74,7 +80,7 @@ public class NodeDiscoveryWithUDP {
 
             });
 
-            ChannelFuture ch = b.bind(8889).sync();
+            ChannelFuture ch = b.bind(NodeDiscoveryWithUDP.config.getInt("UDP.Listener.port")).sync();
 
             ch.channel().closeFuture().sync();
 

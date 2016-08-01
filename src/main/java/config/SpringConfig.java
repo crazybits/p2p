@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import facade.P2P;
+
 /**
  * <p>
  * <b> Spring bean configuration</b>
@@ -32,6 +34,11 @@ public class SpringConfig {
     @Bean
     public P2PClient p2PClient() {
         return new P2PClient();
+    }
+
+    @Bean
+    public P2P p2p() {
+        return new P2P();
     }
 
 

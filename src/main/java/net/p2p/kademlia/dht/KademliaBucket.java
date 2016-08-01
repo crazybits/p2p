@@ -26,6 +26,16 @@ public class KademliaBucket implements IKademliaBucket {
      * <b> TODO : Insert description of the method's responsibility/role. </b>
      * </p>
      * 
+     */
+    public KademliaBucket(final int depth) {
+        this(depth, new KademliaConfig());
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
      * @param depth
      * @param config
      */
@@ -82,4 +92,18 @@ public class KademliaBucket implements IKademliaBucket {
     }
 
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see net.p2p.kademlia.IBucket#getDepth()
+     */
+    public List<NodeContact> getNodes() {
+
+        return this.nodes;
+    }
+
+    public int getNodesCount() {
+
+        return this.nodes.size();
+    }
 }

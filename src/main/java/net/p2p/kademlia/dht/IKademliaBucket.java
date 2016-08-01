@@ -1,5 +1,7 @@
 package net.p2p.kademlia.dht;
 
+import java.util.List;
+
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
@@ -13,5 +15,8 @@ public interface IKademliaBucket {
 
     public int getDepth();
 
+    public List<NodeContact> getNodes();
+
+    public int getNodesCount();
 
 }

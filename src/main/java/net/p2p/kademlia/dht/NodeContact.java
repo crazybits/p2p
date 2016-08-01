@@ -16,7 +16,39 @@ public class NodeContact {
     private int distance;
 
 
-    public void justSeeIt() {
+    public NodeContact(final Node n) {
+        this.node = n;
+        this.ownNodeID = n.getNodeId();
+        this.distance = this.ownNodeID.distance(n.getNodeId());
+        touch();
+    }
+
+    public NodeContact(final NodeID ownerId, final Node n) {
+        this.node = n;
+        this.ownNodeID = ownerId;
+        this.distance = this.ownNodeID.distance(n.getNodeId());
+        touch();
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @param ownNodeID
+     * @param node
+     * @param lastSeen
+     */
+    public NodeContact(final NodeID ownNodeID, final Node node, final long lastSeen) {
+        super();
+        this.ownNodeID = ownNodeID;
+        this.node = node;
+        this.lastSeen = lastSeen;
+        this.distance = ownNodeID.distance(node.getNodeId());
+    }
+
+
+    public void touch() {
         this.lastSeen = System.currentTimeMillis();
     }
 
@@ -79,35 +111,6 @@ public class NodeContact {
      */
     public void setDistance(final int distance) {
         this.distance = distance;
-    }
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @param node
-     */
-    public NodeContact(final Node node) {
-        super();
-        this.node = node;
-    }
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @param ownNodeID
-     * @param node
-     * @param lastSeen
-     */
-    public NodeContact(final NodeID ownNodeID, final Node node, final long lastSeen) {
-        super();
-        this.ownNodeID = ownNodeID;
-        this.node = node;
-        this.lastSeen = lastSeen;
-        this.distance = ownNodeID.distance(node.getNodeId());
     }
 
 

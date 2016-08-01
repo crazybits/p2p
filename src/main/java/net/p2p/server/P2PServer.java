@@ -13,13 +13,16 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+
 public class P2PServer implements Runnable {
 
     static final Logger logger = LoggerFactory.getLogger("P2PServer");
 
-    public void start() throws InterruptedException {
+    static Config config = ConfigFactory.defaultApplication();
 
-        int port = 8888; // TODO move to config file
+    public void start() throws InterruptedException {
 
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -34,7 +37,7 @@ public class P2PServer implements Runnable {
             b.option(ChannelOption.SO_KEEPALIVE, true);
             b.childHandler(new P2PServerChannelInitializer());
 
-            ChannelFuture ch = b.bind(port).sync();
+            ChannelFuture ch = b.bind(P2PServer.config.getInt("TCP.Listener.port")).sync();
 
             ch.addListener(new ChannelFutureListener() {
 
