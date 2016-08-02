@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class P2PListenerAdapter implements P2PListener {
 
 
-    List<P2PListener> listeners = new CopyOnWriteArrayList<>();
+    List<P2PListener> listeners = new CopyOnWriteArrayList<P2PListener>();
 
 
     public void addListener(final P2PListener listener) {

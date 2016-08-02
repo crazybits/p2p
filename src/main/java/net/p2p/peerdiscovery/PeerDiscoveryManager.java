@@ -33,7 +33,7 @@ public class PeerDiscoveryManager {
 
     private static TimeUnit unit = TimeUnit.SECONDS;
 
-    private static ArrayBlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(10);
+    private static ArrayBlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<Runnable>(10);
 
     // TODO: above settings should be read from the config file
 

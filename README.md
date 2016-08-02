@@ -1,4 +1,4 @@
-P2P Build Instructions:
+Linux Build Instructions
 
 step 1: install the required software
 
@@ -11,5 +11,7 @@ git clone https://github.com/crazybits/p2p.git
 step 3: run the starter
 
 cd p2p
+
+mvn compile
 
 mvn exec:java -Dexec.mainClass="Starter"
