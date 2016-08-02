@@ -1,5 +1,7 @@
 package store;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 
 import net.p2p.protocol.Message;
@@ -27,21 +29,17 @@ public class DBTest {
 
         try {
 
-            byte[] in = MarshallingUtil.marshallingObjecToByte(msgMessage);
-
-            System.out.println(in.length);
+            byte[] in = MarshallingUtil.objectToByte(msgMessage);
 
             dataSource.put(in, in);
 
             byte[] out = dataSource.get(in);
 
-            System.out.println(out.length);
+            assertEquals(in.length, out.length);
 
+            Message unmarMessage = (Message) MarshallingUtil.byteToObject(out);
 
-            Message unmarMessage = (Message) MarshallingUtil.unMarshallingByteToObject(out);
-
-
-            System.out.println(unmarMessage.getHeader().getMessageType());
+            assertEquals(unmarMessage, msgMessage);
 
         } catch (IOException e) {
             // TODO Auto-generated catch block

@@ -19,7 +19,7 @@ import serialization.MarshallingFactory;
  */
 public class MarshallingUtil {
 
-    public static byte[] marshallingObjecToByte(final Object obj) throws IOException {
+    public static byte[] objectToByte(final Object obj) throws IOException {
 
         Marshaller marshaller = MarshallingFactory.buildMarshaller();
 
@@ -39,7 +39,7 @@ public class MarshallingUtil {
 
     }
 
-    public static Object unMarshallingByteToObject(final byte[] bytes) throws IOException, ClassNotFoundException {
+    public static Object byteToObject(final byte[] bytes) throws IOException, ClassNotFoundException {
 
         Unmarshaller unmarshaller = MarshallingFactory.buildUnmarshaller();
 

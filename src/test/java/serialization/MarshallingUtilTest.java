@@ -25,10 +25,10 @@ public class MarshallingUtilTest {
         Message msgMessage = MessageFactory.createHelloMessage();
 
 
-        byte[] out = MarshallingUtil.marshallingObjecToByte(msgMessage);
+        byte[] out = MarshallingUtil.objectToByte(msgMessage);
 
 
-        Message object = (Message) MarshallingUtil.unMarshallingByteToObject(out);
+        Message object = (Message) MarshallingUtil.byteToObject(out);
 
 
         assertEquals(1, object.getHeader().getVersion());
