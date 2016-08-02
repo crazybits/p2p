@@ -12,15 +12,18 @@ import java.net.InetSocketAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
+@Component
 public class P2PServer implements Runnable {
 
     static final Logger logger = LoggerFactory.getLogger("P2PServer");
 
-    static Config config = ConfigFactory.defaultApplication();
+    @Autowired
+    Config config;
 
     public void start() throws InterruptedException {
 
@@ -37,7 +40,7 @@ public class P2PServer implements Runnable {
             b.option(ChannelOption.SO_KEEPALIVE, true);
             b.childHandler(new P2PServerChannelInitializer());
 
-            ChannelFuture ch = b.bind(P2PServer.config.getInt("peer.discovery.TCP.Listener.port")).sync();
+            ChannelFuture ch = b.bind(this.config.getInt("peer.discovery.TCP.Listener.port")).sync();
 
             ch.addListener(new ChannelFutureListener() {
 

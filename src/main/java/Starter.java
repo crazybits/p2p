@@ -1,6 +1,6 @@
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import config.SpringConfig;
+import config.AppConfig;
 import facade.P2PFactory;
 
 
@@ -24,7 +24,7 @@ public class Starter {
 
     public static void main(final String[] args) throws InterruptedException {
 
-        Starter.springContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+        Starter.springContext = new AnnotationConfigApplicationContext(AppConfig.class);
 
         P2PFactory.createP2P(Starter.springContext);
 

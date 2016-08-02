@@ -16,17 +16,17 @@ import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-@Scope("prototype")
 public class P2PClient {
 
     static final Logger logger = LoggerFactory.getLogger("P2PClient");
 
 
-    PeerDiscoveryManager peerDiscoveryManager = new PeerDiscoveryManager();
+    @Autowired
+    PeerDiscoveryManager peerDiscoveryManager;
 
     public void connect() {
 

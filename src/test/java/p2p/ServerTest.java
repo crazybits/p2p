@@ -12,14 +12,16 @@ package p2p;
 import net.p2p.server.P2PServer;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
-import config.SpringConfig;
+import config.AppConfig;
 
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
+@Component("ServerTest")
 public class ServerTest extends P2PServer {
 
     /**
@@ -31,13 +33,11 @@ public class ServerTest extends P2PServer {
      */
     public static void main(final String[] args) {
 
-        AnnotationConfigApplicationContext springContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        ServerTest serverTest = new ServerTest();
-
-        Thread serverThread = new Thread(serverTest);
+        Thread serverThread = new Thread(ctx.getBean(ServerTest.class));
         serverThread.start();
+        ctx.close();
 
     }
-
 }

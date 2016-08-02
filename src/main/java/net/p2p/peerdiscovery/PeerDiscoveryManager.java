@@ -12,10 +12,10 @@ import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 /**
  * <p>
@@ -25,7 +25,8 @@ import com.typesafe.config.ConfigFactory;
 @Component
 public class PeerDiscoveryManager {
 
-    Config config = ConfigFactory.defaultApplication();
+    @Autowired
+    Config config;
 
     private static final Logger logger = LoggerFactory.getLogger("PeerDiscoveryManager");
 

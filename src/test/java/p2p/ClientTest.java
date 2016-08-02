@@ -12,23 +12,25 @@ package p2p;
 import net.p2p.client.P2PClient;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
 
-import config.SpringConfig;
+import config.AppConfig;
 
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
+@Component("ClientTest")
 public class ClientTest extends P2PClient {
 
     public static void main(final String[] args) {
 
-        AnnotationConfigApplicationContext springContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        ClientTest clientTest = new ClientTest();
+        ctx.getBean(ClientTest.class).connect();
 
-        clientTest.connect();
+        ctx.close();
 
 
     }

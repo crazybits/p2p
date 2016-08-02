@@ -2,6 +2,8 @@ package net.p2p.kademlia.net;
 
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.socket.nio.NioDatagramChannel;
+import net.p2p.kademlia.manager.NodeManager;
 import net.p2p.kademlia.message.Message;
 import net.p2p.kademlia.message.MessageFactory;
 import net.p2p.kademlia.message.MessageTypes;
@@ -18,8 +20,14 @@ public class DiscoveryHandler extends ChannelHandlerAdapter {
 
     static final Logger logger = LoggerFactory.getLogger("DiscoveryHandler");
 
+    NodeManager nodeManager;
+    NioDatagramChannel channel;
 
-    public DiscoveryHandler() {
+
+    public DiscoveryHandler(final NodeManager nodeManager, final NioDatagramChannel channel) {
+
+        this.nodeManager = nodeManager;
+        this.channel = channel;
 
         DiscoveryHandler.logger.info("DiscoveryHandler instance has been created");
     }

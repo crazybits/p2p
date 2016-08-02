@@ -2,6 +2,9 @@ package kademlia;
 
 import net.p2p.kademlia.net.NodeDiscoveryWithUDP;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import config.AppConfig;
 
 /**
  * <p>
@@ -19,8 +22,11 @@ public class Test {
      */
     public static void main(final String[] args) {
 
-        NodeDiscoveryWithUDP.startKademliaDiscovry();
+        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        NodeDiscoveryWithUDP nodeDiscoveryWithUDP = ctx.getBean(NodeDiscoveryWithUDP.class);
+        nodeDiscoveryWithUDP.startKademliaDiscovry();
+        ctx.close();
 
     }
-
 }

@@ -8,14 +8,16 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.handler.logging.LoggingHandler;
+import net.p2p.kademlia.manager.NodeManager;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import serialization.MarshallingFactory;
 
 import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 
 /**
@@ -23,12 +25,17 @@ import com.typesafe.config.ConfigFactory;
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
+@Component
 public class NodeDiscoveryWithUDP {
 
     static final Logger logger = LoggerFactory.getLogger("NodeDiscoveryWithUDP");
 
+    @Autowired
+    NodeManager nodeManager;
 
-    static Config config = ConfigFactory.defaultApplication();
+    @Autowired
+    Config config;
+
 
     /**
      * <p>
@@ -38,7 +45,7 @@ public class NodeDiscoveryWithUDP {
      * @param args
      */
 
-    public static void startKademliaDiscovry() {
+    public void startKademliaDiscovry() {
 
         // new thread to start UDP listener with UDP channel
         new Thread("client") {
@@ -56,7 +63,7 @@ public class NodeDiscoveryWithUDP {
 
     }
 
-    private static void startUDPListener() {
+    private void startUDPListener() {
 
         EventLoopGroup worker = new NioEventLoopGroup();
 
@@ -75,13 +82,14 @@ public class NodeDiscoveryWithUDP {
                     ch.pipeline().addLast("data packet encoder", new DataPacketEncoder());
                     ch.pipeline().addLast("marshalling Decoder", MarshallingFactory.buildMarshallingDecoder());
                     ch.pipeline().addLast("marshalling Encoder", MarshallingFactory.buildMarshallingEncoder());
-                    ch.pipeline().addLast("kademlia protocol discovery handler", new DiscoveryHandler());
+                    ch.pipeline().addLast("kademlia protocol discovery handler",
+                        new DiscoveryHandler(NodeDiscoveryWithUDP.this.nodeManager, ch));
 
                 }
 
             });
 
-            ChannelFuture ch = b.bind(NodeDiscoveryWithUDP.config.getInt("peer.discovery.UDP.Listener.port")).sync();
+            ChannelFuture ch = b.bind(this.config.getInt("peer.discovery.UDP.Listener.port")).sync();
 
             ch.channel().closeFuture().sync();
 

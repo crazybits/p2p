@@ -7,16 +7,18 @@ import net.p2p.peerdiscovery.PeerDiscoveryManager;
 import net.p2p.server.P2PServer;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
+@Component
 public class P2P {
 
     @Autowired
-    P2PServer server;
+    P2PServer p2pServer;
 
     @Autowired
     PeerDiscoveryManager peerDiscoveryManager;
@@ -27,7 +29,7 @@ public class P2P {
 
         ExecutorService threadExecutorService = Executors.newFixedThreadPool(1);
 
-        threadExecutorService.execute(this.server);
+        threadExecutorService.execute(this.p2pServer);
 
         Thread.sleep(3000);
 
