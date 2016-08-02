@@ -1,8 +1,10 @@
 package store;
 
-import java.math.BigInteger;
-import java.util.Random;
+import java.io.IOException;
 
+import net.p2p.protocol.Message;
+import net.p2p.protocol.MessageFactory;
+import util.MarshallingUtil;
 import datasource.KeyValueDataSource;
 import datasource.mapdb.MapDBDataSource;
 
@@ -13,7 +15,7 @@ import datasource.mapdb.MapDBDataSource;
  */
 public class DBTest {
 
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws ClassNotFoundException {
 
 
         KeyValueDataSource dataSource = new MapDBDataSource();
@@ -21,15 +23,31 @@ public class DBTest {
         dataSource.setName("test");
         dataSource.init();
 
-        byte[] key = new byte[100];
-        byte[] value = new byte[100];
-        new Random().nextBytes(key);
-        new Random().nextBytes(value);
-        dataSource.put(key, value);
+        Message msgMessage = MessageFactory.createHelloMessage();
 
-        BigInteger bigInteger = new BigInteger(1, dataSource.get(key));
+        try {
 
-        System.out.println(bigInteger.toString(16));
+            byte[] in = MarshallingUtil.marshallingObjecToByte(msgMessage);
+
+            System.out.println(in.length);
+
+            dataSource.put(in, in);
+
+            byte[] out = dataSource.get(in);
+
+            System.out.println(out.length);
+
+
+            Message unmarMessage = (Message) MarshallingUtil.unMarshallingByteToObject(out);
+
+
+            System.out.println(unmarMessage.getHeader().getMessageType());
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
 
     }
 }

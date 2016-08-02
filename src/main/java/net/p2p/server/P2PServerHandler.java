@@ -38,8 +38,6 @@ public class P2PServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(final ChannelHandlerContext ctx, final Object msg) {
 
-        P2PServerHandler.logger.debug("chanel read activate");
-
         Message message = (Message) msg;
 
         MessageTypes type = message.getHeader().getMessageType();

@@ -16,6 +16,8 @@ import net.p2p.protocol.MessageFactory;
 import net.p2p.protocol.MessageTypes;
 import net.p2p.protocol.Peer;
 
+import org.jboss.marshalling.ByteInput;
+import org.jboss.marshalling.ByteOutput;
 import org.jboss.marshalling.Marshaller;
 import org.jboss.marshalling.Marshalling;
 import org.jboss.marshalling.Unmarshaller;
@@ -71,28 +73,35 @@ public class JbossMarshallingTest {
     @Test
     public void testMarshallToByte() throws IOException, ClassNotFoundException {
 
-        Message message = MessageFactory.createHelloMessage();
+        Marshaller marshaller = MarshallingFactory.buildMarshaller();
 
-        final Marshaller marshaller = MarshallingFactory.buildMarshaller();
+        Unmarshaller unmarshaller = MarshallingFactory.buildUnmarshaller();
 
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(10240);
+        ByteOutput byteOutput = Marshalling.createByteOutput(baos);
+        marshaller.start(byteOutput);
+        Message obj = MessageFactory.createHelloMessage();
 
-        marshaller.start(Marshalling.createByteOutput(byteArrayOutputStream));
-        marshaller.writeObject(message);
+        try {
+            marshaller.writeObject(obj);
+        } finally {
+            marshaller.finish();
+        }
 
-        byte[] result = byteArrayOutputStream.toByteArray();
-        marshaller.finish();
+        byte[] bytes = baos.toByteArray();
 
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(result);
-        final Unmarshaller unMarshaller = MarshallingFactory.buildUnmarshaller();
-        unMarshaller.start(Marshalling.createByteInput(byteArrayInputStream));
+        ByteInput byteInput = Marshalling.createByteInput(new ByteArrayInputStream(bytes));
+        unmarshaller.start(byteInput);
+        try {
+            assert obj.equals(unmarshaller.readObject());
 
-        Message unMarMessage = (Message) unMarshaller.readObject();
+            Message msgMessage = (Message) unmarshaller.readObject();
 
-        assertEquals(unMarMessage, message);
-
-        marshaller.finish();
+            assertEquals(1, msgMessage.getHeader().getVersion());
 
 
+        } finally {
+            unmarshaller.finish();
+        }
     }
 }

@@ -81,7 +81,7 @@ public class NodeDiscoveryWithUDP {
 
             });
 
-            ChannelFuture ch = b.bind(NodeDiscoveryWithUDP.config.getInt("UDP.Listener.port")).sync();
+            ChannelFuture ch = b.bind(NodeDiscoveryWithUDP.config.getInt("peer.discovery.UDP.Listener.port")).sync();
 
             ch.channel().closeFuture().sync();
 
