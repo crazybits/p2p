@@ -1,17 +1,15 @@
-Linux Build Instructions
+### Linux Build Instructions
 
-step 1: install the required software
+#### step 1: install the required software
 
-sudo apt-get install maven git
+`sudo apt-get install maven git`
 
-step 2: copy the source code
+#### step 2: copy the source code
 
-git clone https://github.com/crazybits/p2p.git
+`git clone https://github.com/crazybits/p2p.git`
 
-step 3: run the starter
+#### step 3: run the starter
 
-cd p2p
+`cd p2p;mvn compile`
 
-mvn compile
-
-mvn exec:java -Dexec.mainClass="Starter"
+`mvn exec:java -Dexec.mainClass="Starter"`
