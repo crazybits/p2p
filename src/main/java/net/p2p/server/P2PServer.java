@@ -37,7 +37,7 @@ public class P2PServer implements Runnable {
             b.option(ChannelOption.SO_KEEPALIVE, true);
             b.childHandler(new P2PServerChannelInitializer());
 
-            ChannelFuture ch = b.bind(P2PServer.config.getInt("TCP.Listener.port")).sync();
+            ChannelFuture ch = b.bind(P2PServer.config.getInt("peer.discovery.TCP.Listener.port")).sync();
 
             ch.addListener(new ChannelFutureListener() {
 

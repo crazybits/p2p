@@ -2,18 +2,20 @@ package net.p2p.peerdiscovery;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import javax.annotation.PostConstruct;
 
 import net.p2p.protocol.Peer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 /**
  * <p>
@@ -22,6 +24,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class PeerDiscoveryManager {
+
+    Config config = ConfigFactory.defaultApplication();
 
     private static final Logger logger = LoggerFactory.getLogger("PeerDiscoveryManager");
 
@@ -50,25 +54,22 @@ public class PeerDiscoveryManager {
         PeerDiscoveryManager.logger.info("PeerDiscoveryManager instance has been initialed");
     }
 
-    @PostConstruct
     private void initSeedNode() {
 
-        Peer seedNode1 = new Peer("127.0.0.1", 8888);
-        Peer seedNode2 = new Peer("127.0.0.1", 8888);
-        Peer seedNode3 = new Peer("127.0.0.1", 8882);
-        Peer seedNode4 = new Peer("127.0.0.1", 8881);
+        List<String> seedNodes = this.config.getStringList("peer.discovery.ip.list");
 
-        PeerDiscoveryManager.initPeers.add(seedNode1);
-        PeerDiscoveryManager.initPeers.add(seedNode2);
-        PeerDiscoveryManager.initPeers.add(seedNode3);
-        PeerDiscoveryManager.initPeers.add(seedNode4);
+        for (String node : seedNodes) {
 
-        // TODO: Move the real init seed node to config file
+            Peer peer = new Peer(node.split(":")[0], Integer.valueOf(node.split(":")[1]));
+            PeerDiscoveryManager.initPeers.add(peer);
+
+        }
 
     }
 
-
     public void startDiscovery() {
+
+        initSeedNode();
 
         Set<Peer> peers = getInitPeers();
 
