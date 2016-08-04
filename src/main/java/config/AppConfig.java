@@ -2,9 +2,10 @@ package config;
 
 import net.p2p.client.P2PClient;
 import net.p2p.kademlia.manager.NodeManager;
-import net.p2p.kademlia.net.NodeDiscoveryWithUDP;
+import net.p2p.kademlia.net.KademliaNodeDiscovery;
 import net.p2p.peerdiscovery.PeerDiscoveryManager;
 import net.p2p.server.P2PServer;
+import net.p2p.server.P2PServerChannelInitializer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +50,12 @@ public class AppConfig {
     }
 
     @Bean
-    public NodeDiscoveryWithUDP nodeDiscoveryWithUDP() {
-        return new NodeDiscoveryWithUDP();
+    public KademliaNodeDiscovery kademliaNodeDiscovery() {
+        return new KademliaNodeDiscovery();
+    }
+
+    @Bean
+    public P2PServerChannelInitializer p2pServerChannelInitializer() {
+        return new P2PServerChannelInitializer();
     }
 }

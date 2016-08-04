@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import serialization.MarshallingFactory;
-
 import com.typesafe.config.Config;
 
 
@@ -26,15 +24,14 @@ import com.typesafe.config.Config;
  * </p>
  */
 @Component
-public class NodeDiscoveryWithUDP {
+public class KademliaNodeDiscovery {
 
     static final Logger logger = LoggerFactory.getLogger("NodeDiscoveryWithUDP");
 
     @Autowired
-    NodeManager nodeManager;
-
-    @Autowired
     Config config;
+    @Autowired
+    NodeManager nodeManager;
 
 
     /**
@@ -54,7 +51,7 @@ public class NodeDiscoveryWithUDP {
                 try {
                     startUDPListener();
                 } catch (Exception e) {
-                    NodeDiscoveryWithUDP.logger.error("start UDP client failure", e);
+                    KademliaNodeDiscovery.logger.error("start UDP client failure", e);
                 }
 
             }
@@ -80,10 +77,8 @@ public class NodeDiscoveryWithUDP {
                     ch.pipeline().addLast("netty logggin handler", new LoggingHandler());
                     ch.pipeline().addLast("data packet decoder", new DataPacketDecoder());
                     ch.pipeline().addLast("data packet encoder", new DataPacketEncoder());
-                    ch.pipeline().addLast("marshalling Decoder", MarshallingFactory.buildMarshallingDecoder());
-                    ch.pipeline().addLast("marshalling Encoder", MarshallingFactory.buildMarshallingEncoder());
                     ch.pipeline().addLast("kademlia protocol discovery handler",
-                        new DiscoveryHandler(NodeDiscoveryWithUDP.this.nodeManager, ch));
+                        new DiscoverHandler(KademliaNodeDiscovery.this.nodeManager, ch));
 
                 }
 
@@ -95,7 +90,7 @@ public class NodeDiscoveryWithUDP {
 
         } catch (Exception e) {
 
-            NodeDiscoveryWithUDP.logger.error("discovery bootstrat is shutdown with error", e);
+            KademliaNodeDiscovery.logger.error("discovery bootstrat is shutdown with error", e);
 
         } finally {
 

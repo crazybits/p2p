@@ -19,17 +19,9 @@ public class KademliaBucket implements IKademliaBucket {
 
     private List<NodeContact> nodes = new ArrayList<NodeContact>();
 
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     */
     public KademliaBucket(final int depth) {
         this.depth = depth;
     }
-
 
     public synchronized NodeContact addNode(final NodeContact e) {
 
@@ -51,11 +43,6 @@ public class KademliaBucket implements IKademliaBucket {
         return sorted.get(0);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.p2p.kademlia.IBucket#removeNode(net.p2p.kademlia.Node)
-     */
     public synchronized void removeNode(final NodeContact contact) {
 
         for (NodeContact entry : this.nodes) {
@@ -66,23 +53,11 @@ public class KademliaBucket implements IKademliaBucket {
         }
     }
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.p2p.kademlia.IBucket#getDepth()
-     */
     public int getDepth() {
 
         return this.depth;
     }
 
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see net.p2p.kademlia.IBucket#getDepth()
-     */
     public List<NodeContact> getNodes() {
 
         return this.nodes;

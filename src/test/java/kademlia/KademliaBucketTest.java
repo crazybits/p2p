@@ -17,7 +17,7 @@ import org.junit.Test;
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
-public class KademliaTest {
+public class KademliaBucketTest {
 
     @Test
     public void testDistance() {

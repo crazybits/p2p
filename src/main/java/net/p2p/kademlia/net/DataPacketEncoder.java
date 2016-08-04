@@ -1,22 +1,25 @@
 package net.p2p.kademlia.net;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
-import java.net.InetSocketAddress;
 import java.util.List;
+
+import net.p2p.kademlia.message.DiscoverDataPacket;
+import net.p2p.kademlia.message.Message;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import util.EncoderUtil;
 
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
-public class DataPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
+public class DataPacketEncoder extends MessageToMessageEncoder<DiscoverDataPacket> {
 
     static final Logger logger = LoggerFactory.getLogger("DataPacketEncoder");
 
@@ -31,11 +34,15 @@ public class DataPacketEncoder extends MessageToMessageEncoder<ByteBuf> {
         DataPacketEncoder.logger.info("DataPacketEncoder instance is created");
     }
 
-    protected void encode(final ChannelHandlerContext ctx, final ByteBuf buff, final List<Object> out) throws Exception {
+    @Override
+    protected void encode(final ChannelHandlerContext ctx, final DiscoverDataPacket packet, final List<Object> out)
+        throws Exception {
 
-        DatagramPacket packet = new DatagramPacket(buff.retain(), new InetSocketAddress("127.0.0.1", 8889));
+        Message msgMessage = packet.getMessage();
 
-        out.add(packet);
+        DatagramPacket outPacket = new DatagramPacket(EncoderUtil.objectToByte(msgMessage), packet.getAddress());
+
+        out.add(outPacket);
 
     }
 }

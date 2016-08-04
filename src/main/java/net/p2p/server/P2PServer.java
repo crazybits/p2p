@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import com.typesafe.config.Config;
 
-@Component
+@Component("P2PServer")
 public class P2PServer implements Runnable {
 
     static final Logger logger = LoggerFactory.getLogger("P2PServer");

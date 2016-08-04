@@ -1,6 +1,6 @@
 package kademlia;
 
-import net.p2p.kademlia.net.NodeDiscoveryWithUDP;
+import net.p2p.kademlia.net.KademliaNodeDiscovery;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -11,7 +11,7 @@ import config.AppConfig;
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
-public class Test {
+public class KademliaListenerTest {
 
     /**
      * <p>
@@ -24,8 +24,8 @@ public class Test {
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfig.class);
 
-        NodeDiscoveryWithUDP nodeDiscoveryWithUDP = ctx.getBean(NodeDiscoveryWithUDP.class);
-        nodeDiscoveryWithUDP.startKademliaDiscovry();
+        KademliaNodeDiscovery nodeDiscovery = ctx.getBean(KademliaNodeDiscovery.class);
+        nodeDiscovery.startKademliaDiscovry();
         ctx.close();
 
     }

@@ -16,23 +16,23 @@ public class Message implements Serializable {
      */
     private static final long serialVersionUID = 5540605926627038194L;
 
-    MessageTypes types;
+    MessageTypes type;
 
     MessageBody body;
 
     /**
      * @return the types
      */
-    public MessageTypes getTypes() {
-        return this.types;
+    public MessageTypes getType() {
+        return this.type;
     }
 
     /**
      * @param types
      *            the types to set
      */
-    public void setTypes(final MessageTypes types) {
-        this.types = types;
+    public void setTypes(final MessageTypes type) {
+        this.type = type;
     }
 
 
@@ -43,9 +43,9 @@ public class Message implements Serializable {
      * 
      * @param types
      */
-    public Message(final MessageTypes types) {
+    public Message(final MessageTypes type) {
         super();
-        this.types = types;
+        this.type = type;
     }
 
     /*
@@ -54,7 +54,7 @@ public class Message implements Serializable {
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "Message [types=" + this.types + ", body=" + this.body + "]";
+        return "Message [types=" + this.type + ", body=" + this.body + "]";
     }
 
 

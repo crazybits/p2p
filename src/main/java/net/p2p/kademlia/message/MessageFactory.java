@@ -13,6 +13,9 @@ public class MessageFactory {
         case PING:
             msg = new Message(MessageTypes.PING);
             break;
+        case PONG:
+            msg = new Message(MessageTypes.PONG);
+            break;
         case FIND_NODE:
             msg = new Message(MessageTypes.FIND_NODE);
             break;

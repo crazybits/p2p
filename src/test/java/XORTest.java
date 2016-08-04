@@ -1,5 +1,6 @@
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
+import java.util.TreeMap;
 
 import org.junit.Test;
 
@@ -43,5 +44,14 @@ public class XORTest {
         i = i << 2;
 
         System.out.println(i);
+    }
+
+    @Test
+    public void testTree() {
+        TreeMap tree = new TreeMap<>();
+
+        String test = null;
+
+        tree.put("test", test.trim());
     }
 }
