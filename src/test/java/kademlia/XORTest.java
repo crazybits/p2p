@@ -1,6 +1,7 @@
+package kademlia;
+
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
-import java.util.TreeMap;
 
 import org.junit.Test;
 
@@ -46,12 +47,4 @@ public class XORTest {
         System.out.println(i);
     }
 
-    @Test
-    public void testTree() {
-        TreeMap tree = new TreeMap<>();
-
-        String test = null;
-
-        tree.put("test", test.trim());
-    }
 }

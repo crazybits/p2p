@@ -1,5 +1,6 @@
 package net.p2p.kademlia.dht;
 
+import java.io.Serializable;
 import java.net.InetSocketAddress;
 
 /**
@@ -7,7 +8,14 @@ import java.net.InetSocketAddress;
  * <b> TODO : Insert description of the class's responsibility/role. </b>
  * </p>
  */
-public class Node {
+public class Node implements Serializable {
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the field. </b>
+     * </p>
+     */
+    private static final long serialVersionUID = 9063375747292670505L;
 
     private NodeID nodeId;
 
@@ -40,6 +48,11 @@ public class Node {
         this.address = address;
     }
 
+
+    public int distance(final Node targetNode) {
+
+        return this.nodeId.distance(targetNode.getNodeId());
+    }
 
     /**
      * @return the nodeId
@@ -109,11 +122,7 @@ public class Node {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#toString()
-     */
+    @Override
     public String toString() {
         return "Node [nodeId=" + this.nodeId.toBinaryString() + ", address=" + this.address + "]";
     }

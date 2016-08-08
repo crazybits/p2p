@@ -19,7 +19,7 @@ public class DHT {
 
     private KademliaBucket[] buckets;
 
-    private List<NodeContact> allNodes;
+    private List<NodeContact> allNodesOfDHT;
 
 
     /**
@@ -43,7 +43,7 @@ public class DHT {
     public DHT(final Node self, final boolean includeSelf) {
 
         this.self = self;
-        this.allNodes = new ArrayList<NodeContact>();
+        this.allNodesOfDHT = new ArrayList<NodeContact>();
 
         this.buckets = new KademliaBucket[KademliaConfig.BUCKETS_COUNT];
         for (int i = 0; i < KademliaConfig.BUCKETS_COUNT; i++) {
@@ -65,17 +65,16 @@ public class DHT {
      */
     public synchronized Node addNode(final Node n) {
 
-        NodeContact contact = new NodeContact(n);
+        NodeContact contact = new NodeContact(this.self.getNodeId(), n);
         NodeContact lastSeen = this.buckets[getBucketId(contact)].addNode(contact);
         if (lastSeen != null) {
-            return lastSeen.getNode();
+            return lastSeen.getRemoteNode();
         }
-        if (!this.allNodes.contains(contact)) {
-            this.allNodes.add(contact);
+        if (!this.allNodesOfDHT.contains(contact)) {
+            this.allNodesOfDHT.add(contact);
         }
         return null;
     }
-
 
     /**
      * <p>
@@ -85,11 +84,11 @@ public class DHT {
      */
     public synchronized void removeNode(final Node n) {
 
-        NodeContact node = new NodeContact(n);
-        this.buckets[getBucketId(node)].removeNode(node);
-        this.allNodes.remove(node);
-    }
+        NodeContact node = new NodeContact(this.self.getNodeId(), n);
 
+        this.buckets[getBucketId(node)].removeNode(node);
+        this.allNodesOfDHT.remove(node);
+    }
 
     /**
      * <p>
@@ -99,7 +98,7 @@ public class DHT {
      */
     public synchronized boolean contains(final Node n) {
 
-        NodeContact e = new NodeContact(n);
+        NodeContact e = new NodeContact(this.self.getNodeId(), n);
         for (KademliaBucket b : this.buckets) {
             if (b.getNodes().contains(e)) {
                 return true;
@@ -116,7 +115,7 @@ public class DHT {
      */
     public synchronized void touchNode(final Node n) {
 
-        NodeContact e = new NodeContact(n);
+        NodeContact e = new NodeContact(this.self.getNodeId(), n);
         for (KademliaBucket b : this.buckets) {
             if (b.getNodes().contains(e)) {
                 b.getNodes().get(b.getNodes().indexOf(e)).touch();
@@ -149,7 +148,7 @@ public class DHT {
      * 
      */
     public synchronized int getNodesCount() {
-        return this.allNodes.size();
+        return this.allNodesOfDHT.size();
     }
 
 
@@ -166,7 +165,7 @@ public class DHT {
         for (KademliaBucket b : this.buckets) {
 
             for (NodeContact e : b.getNodes()) {
-                if (!e.getNode().equals(this.self)) {
+                if (!e.getRemoteNode().equals(this.self)) {
                     nodes.add(e);
                 }
             }
@@ -191,7 +190,7 @@ public class DHT {
         }
 
         for (NodeContact e : closestEntries) {
-            closestNodes.add(e.getNode());
+            closestNodes.add(e.getRemoteNode());
         }
         return closestNodes;
     }
@@ -204,7 +203,15 @@ public class DHT {
      */
     public int getBucketId(final NodeContact contact) {
 
-        int id = this.self.getNodeId().distance(contact.getNode().getNodeId()) - 1;
+        int id = this.self.getNodeId().distance(contact.getRemoteNode().getNodeId()) - 1;
         return id < 0 ? 0 : id;
+    }
+
+    public Node getSelfNode() {
+        return this.self;
+    }
+
+    public KademliaBucket[] getBuckets() {
+        return this.buckets;
     }
 }

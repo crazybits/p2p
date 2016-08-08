@@ -46,7 +46,7 @@ public class KademliaBucket implements IKademliaBucket {
     public synchronized void removeNode(final NodeContact contact) {
 
         for (NodeContact entry : this.nodes) {
-            if (contact.getNode().equals(entry.getNode())) {
+            if (entry.equals(contact)) {
                 this.nodes.remove(contact);
                 break;
             }

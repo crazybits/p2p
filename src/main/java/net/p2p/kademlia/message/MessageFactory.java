@@ -19,8 +19,8 @@ public class MessageFactory {
         case FIND_NODE:
             msg = new Message(MessageTypes.FIND_NODE);
             break;
-        case FIND_VALUE:
-            msg = new Message(MessageTypes.FIND_VALUE);
+        case FOUND_VALUES:
+            msg = new Message(MessageTypes.FOUND_VALUES);
             break;
         case STORE:
             msg = new Message(MessageTypes.STORE);

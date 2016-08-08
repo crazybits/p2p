@@ -35,8 +35,8 @@ public class DistanceComparator implements Comparator<NodeContact> {
     @Override
     public int compare(final NodeContact contact1, final NodeContact contact2) {
 
-        int d1 = contact1.getNode().getNodeId().distance(this.targeId);
-        int d2 = contact2.getNode().getNodeId().distance(this.targeId);
+        int d1 = contact1.getRemoteNode().getNodeId().distance(this.targeId);
+        int d2 = contact2.getRemoteNode().getNodeId().distance(this.targeId);
 
         if (d1 > d2) {
             return 1;

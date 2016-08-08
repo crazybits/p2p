@@ -1,8 +1,8 @@
 package net.p2p.kademlia.dht;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.Random;
 
 import net.p2p.kademlia.config.KademliaConfig;
@@ -14,8 +14,14 @@ import net.p2p.kademlia.config.KademliaConfig;
  * /protocol/kademlia/specs.html </b>
  * </p>
  */
-public class NodeID {
+public class NodeID implements Serializable {
 
+    /**
+     * <p>
+     * <b> TODO : Insert description of the field. </b>
+     * </p>
+     */
+    private static final long serialVersionUID = 8967217876343846137L;
     private byte[] IDBytes;
 
     /**
@@ -51,26 +57,6 @@ public class NodeID {
     }
 
 
-    /**
-     * <p>
-     * <b> Genereate node id with the given the BitSet</b>
-     * </p>
-     * 
-     * @param BitSet
-     *            bits
-     */
-
-
-    public NodeID(final BitSet bits) {
-
-        if (bits.size() != KademliaConfig.ID_BIT_LENGTH) {
-            throw new IllegalArgumentException("Invalid byte length");
-        }
-
-        this.IDBytes = bits.toByteArray();
-    }
-
-
     public byte[] getBytes() {
 
         return this.IDBytes;
@@ -80,26 +66,23 @@ public class NodeID {
 
     /**
      * <p>
-     * <b> cacluate the distance of the target node id,the return result date
-     * type is also NodeID</b>
+     * <b> cacluate the distance of the target node id</b>
      * </p>
      * 
      * @param NodeID
      */
-    public NodeID xor(final NodeID id) {
+    public byte[] xor(final NodeID to) {
 
-        byte[] result = new byte[KademliaConfig.ID_BIT_LENGTH / 8];
-        byte[] idByte = id.getBytes();
-
+        byte[] xorResult = new byte[KademliaConfig.ID_BIT_LENGTH / 8];
+        byte[] toNodeIDBytes = to.getBytes();
 
         for (int i = 0; i < KademliaConfig.ID_BIT_LENGTH / 8; i++) {
 
-            result[i] = (byte) (this.IDBytes[i] ^ idByte[i]);
+            xorResult[i] = (byte) (toNodeIDBytes[i] ^ this.IDBytes[i]);
+
         }
 
-        NodeID resId = new NodeID(result);
-
-        return resId;
+        return xorResult;
 
     }
 
@@ -113,24 +96,72 @@ public class NodeID {
      */
     public int distance(final NodeID target) {
 
-        NodeID xorResult = xor(target);
+        byte[] xorResult = xor(target);
+
+        int d = KademliaConfig.ID_BIT_LENGTH;
 
         // find the first "1" bit of the xor result
 
-        BitSet bitSet = BitSet.valueOf(xorResult.getBytes());
+        for (byte b : xorResult) {
+            if (b == 0) {
+                d -= 8;
+            } else {
+                int count = 0;
+                for (int i = 7; i >= 0; i--) {
+                    boolean a = (b & (1 << i)) == 0;
+                    if (a) {
+                        count++;
+                    } else {
+                        break;
+                    }
+                }
 
-        int position = 0;
+                d -= count;
 
-        for (int i = 0; i < KademliaConfig.ID_BIT_LENGTH; i++) {
-
-            if (bitSet.get(i)) {
-                position = i;
                 break;
             }
-
         }
+        return d;
 
-        return position;
+
+    }
+
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @return
+     */
+    public BigInteger toBigInteger() {
+
+        return new BigInteger(1, this.getBytes());
+
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @return
+     */
+    public String toHexString() {
+
+        return new BigInteger(1, this.IDBytes).toString(16);
+
+    }
+
+    /**
+     * <p>
+     * <b> TODO : Insert description of the method's responsibility/role. </b>
+     * </p>
+     * 
+     * @return
+     */
+    public String toBinaryString() {
+        return new BigInteger(1, this.IDBytes).toString(2);
 
     }
 
@@ -160,53 +191,8 @@ public class NodeID {
         return true;
     }
 
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @return
-     */
-    public BigInteger toBigInteger() {
-
-        return new BigInteger(1, this.getBytes());
-
-    }
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @return
-     */
-    public String toHexString() {
-
-        BigInteger bigInteger = new BigInteger(1, this.IDBytes);
-
-        return bigInteger.toString(16);
-
-
-    }
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @return
-     */
-    public String toBinaryString() {
-
-        BigInteger bigInteger = new BigInteger(1, this.IDBytes);
-
-        return bigInteger.toString(2);
-
-
-    }
-
     @Override
     public String toString() {
-        return this.toHexString();
+        return this.toBinaryString();
     }
 }

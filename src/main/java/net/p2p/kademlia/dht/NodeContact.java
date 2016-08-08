@@ -1,5 +1,6 @@
 package net.p2p.kademlia.dht;
 
+
 /**
  * <p>
  * <b> TODO : Insert description of the class's responsibility/role. </b>
@@ -7,26 +8,18 @@ package net.p2p.kademlia.dht;
  */
 public class NodeContact {
 
-    private NodeID ownNodeID;
+    private NodeID selfNodeID;
 
-    private Node node;
+    private Node remoteNode;
 
     private long lastSeen;
 
     private int distance;
 
-
-    public NodeContact(final Node n) {
-        this.node = n;
-        this.ownNodeID = n.getNodeId();
-        this.distance = this.ownNodeID.distance(n.getNodeId());
-        touch();
-    }
-
-    public NodeContact(final NodeID ownerId, final Node n) {
-        this.node = n;
-        this.ownNodeID = ownerId;
-        this.distance = this.ownNodeID.distance(n.getNodeId());
+    public NodeContact(final NodeID selfNodeID, final Node remoteContactNode) {
+        this.remoteNode = remoteContactNode;
+        this.selfNodeID = selfNodeID;
+        this.distance = this.selfNodeID.distance(remoteContactNode.getNodeId());
         touch();
     }
 
@@ -36,25 +29,8 @@ public class NodeContact {
      * </p>
      * 
      */
-    public int distance(final NodeID from, final NodeID to) {
-        return from.distance(to);
-    }
-
-    /**
-     * <p>
-     * <b> TODO : Insert description of the method's responsibility/role. </b>
-     * </p>
-     * 
-     * @param ownNodeID
-     * @param node
-     * @param lastSeen
-     */
-    public NodeContact(final NodeID ownNodeID, final Node node, final long lastSeen) {
-        super();
-        this.ownNodeID = ownNodeID;
-        this.node = node;
-        this.lastSeen = lastSeen;
-        this.distance = ownNodeID.distance(node.getNodeId());
+    public int distance(final NodeID self, final NodeID remote) {
+        return self.distance(remote);
     }
 
 
@@ -65,15 +41,15 @@ public class NodeContact {
     /**
      * @return the ownNodeID
      */
-    public NodeID getOwnNodeID() {
-        return this.ownNodeID;
+    public NodeID getSelfNodeID() {
+        return this.selfNodeID;
     }
 
     /**
      * @return the node
      */
-    public Node getNode() {
-        return this.node;
+    public Node getRemoteNode() {
+        return this.remoteNode;
     }
 
     /**
@@ -84,4 +60,33 @@ public class NodeContact {
         return this.lastSeen;
     }
 
+    /**
+     * @return the distance
+     */
+    public int getDistance() {
+        return this.distance;
+    }
+
+    @Override
+    public String toString() {
+        return "NodeContact [selfNodeID=" + this.selfNodeID.toBinaryString() + ", remoteNode=" + this.remoteNode + ", lastSeen="
+            + this.lastSeen + ", distance=" + this.distance + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        return this.remoteNode.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        boolean ret = false;
+
+        if (o instanceof NodeContact) {
+            NodeContact e = (NodeContact) o;
+            ret = this.getRemoteNode().equals(e.getRemoteNode());
+        }
+
+        return ret;
+    }
 }

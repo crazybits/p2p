@@ -69,7 +69,7 @@ public class KademliaNodeDiscovery {
             Bootstrap b = new Bootstrap();
             b.group(worker);
             b.channel(NioDatagramChannel.class);
-            b.option(ChannelOption.SO_BROADCAST, true);
+            b.option(ChannelOption.SO_BROADCAST, false);
             b.handler(new ChannelInitializer<NioDatagramChannel>() {
 
                 protected void initChannel(final NioDatagramChannel ch) throws Exception {

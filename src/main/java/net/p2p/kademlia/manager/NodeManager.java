@@ -1,9 +1,6 @@
 package net.p2p.kademlia.manager;
 
 import io.netty.channel.ChannelHandlerContext;
-
-import java.net.InetSocketAddress;
-
 import net.p2p.kademlia.dht.DHT;
 import net.p2p.kademlia.message.DiscoverDataPacket;
 import net.p2p.kademlia.message.MessageFactory;
@@ -46,6 +43,10 @@ public class NodeManager {
 
     }
 
+    public void channelActivated() {
+
+    }
+
     public void handleInbound(final ChannelHandlerContext ctx, final Object msg) {
 
 
@@ -55,27 +56,23 @@ public class NodeManager {
         switch (type) {
         case PING:
             NodeManager.logger.info("Ping message recevied");
-            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.PONG), new InetSocketAddress(
-                "127.0.0.1", 8889)));
+            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.PONG), message.getAddress()));
             break;
         case PONG:
             NodeManager.logger.info("Pong message recevied");
-            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.FIND_NODE), new InetSocketAddress(
-                "127.0.0.1", 8889)));
+            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.FIND_NODE), message.getAddress()));
             break;
         case FIND_NODE:
             NodeManager.logger.info("FindNode message recevied");
-            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.FIND_VALUE), new InetSocketAddress(
-                "127.0.0.1", 8889)));
+            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.FOUND_VALUES), message.getAddress()));
             break;
-        case FIND_VALUE:
+        case FOUND_VALUES:
             NodeManager.logger.info("FindValue message recevied");
-            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.STORE), new InetSocketAddress(
-                "127.0.0.1", 8889)));
+            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.STORE), message.getAddress()));
             break;
         case STORE:
             NodeManager.logger.info("Store message recevied");
-            // ctx.writeAndFlush(MessageFactory.createMessage(MessageTypes.FIND_NODE));
+            ctx.writeAndFlush(new DiscoverDataPacket(MessageFactory.createMessage(MessageTypes.PONG), message.getAddress()));
             break;
         default:
             break;
